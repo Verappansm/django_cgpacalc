@@ -1,0 +1,41 @@
+<!-- calculator/templates/calculator/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link id="theme-style" rel="stylesheet" href="{% static 'calc1/light.css' %}">
+    <script>
+        var lightTheme = "{% static 'calc1/light.css' %}";
+        var darkTheme = "{% static 'calc1/dark.css' %}";
+
+        function toggleTheme() {
+            var themeStyle = document.getElementById('theme-style');
+            if (themeStyle.getAttribute('href') === lightTheme) {
+                themeStyle.setAttribute('href', darkTheme);
+            } else {
+                themeStyle.setAttribute('href', lightTheme);
+            }
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">CGPA Calculator</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/calculate/">Calculate</a></li>
+            </ul>
+            <button class="btn btn-outline-secondary" onclick="toggleTheme()">Toggle Theme</button>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

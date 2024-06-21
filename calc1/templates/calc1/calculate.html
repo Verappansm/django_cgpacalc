@@ -1,0 +1,49 @@
+{% extends 'calc1/base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center my-4">GPA Calculator</h1>
+    <form id="calculator-form" method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <div id="courses-container">
+            {% for form in formset %}
+                <div class="form-row mb-3">
+                    <div class="form-group col-md-6">
+                        {{ form.credits.label_tag }}
+                        {{ form.credits }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form.grade.label_tag }}
+                        {{ form.grade }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn btn-secondary mb-3" onclick="addCourse()">Add Course</button>
+            <button type="submit" class="btn btn-primary mb-3">Calculate</button>
+        </div>
+    </form>
+    <div id="result" class="text-center mt-4">
+        <h2>Your CGPA is <span id="cgpa-value" class="font-weight-bold" style="font-size: 2.5rem; color: #007bff;"></span></h2>
+    </div>
+</div>
+<script>
+    function addCourse() {
+        var container = document.getElementById('courses-container');
+        var newCourse = container.children[0].cloneNode(true);
+        container.appendChild(newCourse);
+    }
+
+    document.getElementById('calculator-form').onsubmit = function(event) {
+        event.preventDefault();
+        var form = new FormData(event.target);
+        fetch(event.target.action, {
+            method: 'POST',
+            body: form
+        }).then(response => response.json()).then(data => {
+            document.getElementById('cgpa-value').innerText = parseFloat(data.cgpa).toFixed(2);
+        });
+    }
+</script>
+{% endblock %}
